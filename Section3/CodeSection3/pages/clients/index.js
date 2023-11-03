@@ -1,16 +1,28 @@
-import Link from 'next/link';
+import Link from "next/link";
 
 function ClientsPage() {
   const clients = [
-    {id: 1, name: 'Alaa'},
-    {id: 2, name: 'Hamdy'},
-    {id: 3, name: 'Mohammadi'},
-  ]
+    { id: 1, name: "Alaa" },
+    { id: 2, name: "Hamdy" },
+    { id: 3, name: "Mohammadi" },
+  ];
   return (
     <div>
       <h1>The clients Page</h1>
+      {/* Two ways to write href Link */}
       <ul>
-        {clients.map((client) => <li key={client.id}><Link href={`/clients/${client.id}`}>{client.name}</Link> </li>)}
+        {clients.map((client) => (
+          <li key={client.id}>
+            <Link href={`/clients/${client.id}`}>{client.name}</Link>{" "}
+          </li>
+        ))}
+      </ul>
+      <ul>
+        {clients.map((client) => (
+          <li key={client.id}>
+            <Link href={{pathname: '/clients/[id]', query: {id: client.id}}}>{client.name}</Link>{" "}
+          </li>
+        ))}
       </ul>
     </div>
   );
