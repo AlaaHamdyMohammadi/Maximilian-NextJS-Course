@@ -3,6 +3,7 @@ import path from "path";
 
 function ProductDetailsPage(props) {
   const { product } = props;
+  if(!product) return <h2>Loading...</h2>
   return (
     <div>
       <h1>Title: {product.title}</h1>
@@ -30,6 +31,10 @@ export async function getStaticProps(context) {
   const data = await getData();
   const product = data.products.find((item) => item.id === productId);
 
+    if(!product){
+        return {notFound: true};
+    }
+
   return {
     props: {
       product,
@@ -44,6 +49,7 @@ export async function getStaticPaths() {
   const data = await getData();
   const ids = data.products.map((product) => product.id);
   const pathParams = ids.map((id) => ({params: {productId: id}}));
+  
   return {
     paths: pathParams,
     fallback: false,
