@@ -11,14 +11,23 @@ function ProductDetailsPage(props) {
   );
 }
 
-export async function getStaticProps(context) {
-  const { params } = context;
-  const productId = params.productId;
-
+async function getData() {
   const filePath = path.join(process.cwd(), "data", "dummy-backend.json");
   const jsonData = await fs.readFile(filePath);
   const data = JSON.parse(jsonData);
 
+  return data;
+}
+
+export async function getStaticProps(context) {
+  const { params } = context;
+  const productId = params.productId;
+
+  //   const filePath = path.join(process.cwd(), "data", "dummy-backend.json");
+  //   const jsonData = await fs.readFile(filePath);
+  //   const data = JSON.parse(jsonData);
+
+  const data = await getData();
   const product = data.products.find((item) => item.id === productId);
 
   return {
@@ -29,16 +38,16 @@ export async function getStaticProps(context) {
   };
 }
 
-export async function getStaticPaths(){
-    //tell Next.js which instance of this dynamic page should be generated
-    return{
-        paths: [
-            {params: {productId: 'p1'}},
-            {params: {productId: 'p2'}},
-            {params: {productId: 'p3'}},
-        ],
-        fallback: false,
-    } 
+export async function getStaticPaths() {
+  //tell Next.js which instance of this dynamic page should be generated
+
+  const data = await getData();
+  const ids = data.products.map((product) => product.id);
+  const pathParams = ids.map((id) => ({params: {productId: id}}));
+  return {
+    paths: pathParams,
+    fallback: false,
+  };
 }
 
 export default ProductDetailsPage;
