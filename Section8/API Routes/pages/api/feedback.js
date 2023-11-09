@@ -1,14 +1,21 @@
-import fs from "fs/promises";
+import fs from "fs";
 import path from "path";
 
 function handler(req, res) {
   if (req.method === "POST") {
-    const { email, feedback } = req.body;
+
+    // const email = req.body.email;
+    // const feedbackText = req.body.text;
+    const {email, feedback} = req.body;
+    
+
     const newFeedback = {
       id: new Date().toISOString(),
       email,
+      //   text: feedbackText,
       feedback,
     };
+
     const filePath = path.join(process.cwd(), "data", "feedback.json");
     const fileData = fs.readFileSync(filePath);
     const data = JSON.parse(fileData);

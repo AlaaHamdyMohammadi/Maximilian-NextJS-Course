@@ -1,14 +1,37 @@
-import Head from 'next/head';
-import { useRef } from 'react';
+import axios from "axios";
+import Head from "next/head";
+import { useRef } from "react";
 
 function HomePage() {
   const emailInputRef = useRef();
   const feedbackInputRef = useRef();
 
-  function handleSubmit(e){
+  async function handleSubmit(e) {
     e.preventDefault();
+
     const enteredEmail = emailInputRef.current.value;
     const enteredFeedback = feedbackInputRef.current.value;
+
+    const reqBody = { email: enteredEmail, feedback: enteredFeedback };
+
+    // fetch('/api/feedback', {
+    //   method: 'POST',
+    //   body: JSON.stringify(reqBody),
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    // })
+    //   .then((response) => response.json())
+    //   .then((data) => console.log(data));
+
+    const res = await axios.post(`/api/feedback`, JSON.stringify(reqBody), {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    const data = await res;
+    console.log(data);
   }
 
   return (
@@ -19,14 +42,14 @@ function HomePage() {
       <h1>The Home Page</h1>
       <form onSubmit={handleSubmit}>
         <div>
-          <label htmlFor="email">Email</label>
-          <input id="email" type="text" ref={emailInputRef} />
+          <label htmlFor="email">Your Email Address</label>
+          <input type="email" id="email" ref={emailInputRef} />
         </div>
         <div>
-          <label htmlFor="feedback">Your feedback</label>
-          <textarea rows="5" id="feedback" ref={feedbackInputRef} />
+          <label htmlFor="feedback">Your Feedback</label>
+          <textarea id="feedback" rows="5" ref={feedbackInputRef}></textarea>
         </div>
-        <button>Submit</button>
+        <button>Send Feedback</button>
       </form>
     </div>
   );
