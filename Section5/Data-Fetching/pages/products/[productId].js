@@ -3,7 +3,7 @@ import path from "path";
 
 function ProductDetailsPage(props) {
   const { product } = props;
-  if(!product) return <h2>Loading...</h2>
+  if(!product) return <h2>Loading... </h2>
   return (
     <div>
       <h1>Title: {product.title}</h1>
