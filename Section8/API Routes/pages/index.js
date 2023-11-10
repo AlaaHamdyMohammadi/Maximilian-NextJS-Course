@@ -1,8 +1,9 @@
 import axios from "axios";
 import Head from "next/head";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 function HomePage() {
+  const [loadFeedback, setLoadFeedback] = useState([]);
   const emailInputRef = useRef();
   const feedbackInputRef = useRef();
 
@@ -34,6 +35,12 @@ function HomePage() {
     console.log(data);
   }
 
+  async function handleLoadFeedback(){
+    const res = await axios.get(`/api/feedback`);
+    //console.log(res.data.result)
+    setLoadFeedback(res.data.result);
+  }
+
   return (
     <div>
       <Head>
@@ -51,6 +58,20 @@ function HomePage() {
         </div>
         <button>Send Feedback</button>
       </form>
+      <hr />
+      <button onClick={handleLoadFeedback}>Load Feedback</button>
+      <div>
+        {loadFeedback.map((item) => (
+          <ul key={item.id}>
+            <li>
+            <strong>Email:</strong>
+            {item.email}
+            </li>
+            
+
+          </ul>
+        ))}
+      </div>
     </div>
   );
 }
